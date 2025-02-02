@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="row">
+
+    <div class="col-8">
+      <table>
+        <tbody>
+          @for (row of matrix; track row; let rowNum = $index) {
+            <tr>
+            @for (col of row; track col; let colNum = $index) {
+              <td class="data-cell p-2">
+                <div 
+                  class="d-flex justify-content-center align-items-center led"
+                  (click)="setColour(rowNum, colNum)"
+                  [style.background-color]="col.colour !== null ? rgbToHex(col.colour.r, col.colour.g, col.colour.b) : defaultColour"
+                >
+                  <span>{{ col.num }}</span>
+                </div>
+              </td>
+            }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-4">
+
+      <form class="mb-5 pt-2">
+        <label for="colourPicker" class="form-label h5 mb-4">Colour picker</label>
+        <input 
+          id="colourPicker" 
+          type="color" 
+          class="form-control form-control-color"
+          style="width: 80px; height: 80px;"
+          [value]="defaultColour"
+          title="Choose a colour"
+          (change)="changeColour($event)"
+        >
+      </form>
+
+ 
+      <div class="mb-5">
+        <p class="h5 mb-4">Groups</p>
+
+        <form [formGroup]="form" class="row g-3 mb-4">
+          <div class="col-8">
+            <input type="text" class="form-control" formControlName="newGroup">
+          </div>
+          <div class="col-4">
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              (click)="addGroup()"
+            >
+              Add group
+            </button>
+          </div>
+        </form>
+
+        @for (group of groups; track group) {
+          <div [ngClass]="{'mb-2': !$last}">
+            <input 
+              type="radio" 
+              class="btn-check " 
+              name="group" 
+              [id]="group" 
+              [checked]="group === currentGroup"
+              (click)="setGroup(group)"
+            >
+            <label class="btn" [for]="group" >{{ group }}</label>
+            <button 
+              class="btn btn-link text-danger" 
+              type="button" 
+              (click)="removeGroup(group)"
+              >
+              <i class="bi bi-x-lg"></i>
+            </button>
+            
+            @if (!$last) {
+              <br />
+            }
+          </div>
+        }
+      </div>
+ 
+      <p class="h5 mb-4">Code</p>
+      <p class="mb-0">
+          @for (data of flatMatrixString(); track data) {
+            <pre class="mb-0 code">{{ data }}</pre>
+          }
+      </p>
+    </div>
+  </div>
+</div>
