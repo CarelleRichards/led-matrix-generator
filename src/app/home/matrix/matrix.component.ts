@@ -1,18 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
-export interface Colour {
-  r: number; 
-  g: number; 
-  b: number; 
-};
-
-export interface Data {
-  num: number;
-  colour: Colour | null;
-  group: string | null;
-};
+import { Colour, Data, MatrixFile } from '../../types';
+import { loadFromFile, saveToFile } from '../../utils/file.utils';
 
 @Component({
   selector: 'app-matrix',
@@ -33,13 +23,16 @@ export class MatrixComponent {
   groups: string[] = [this.currentGroup];
   
   form = new FormGroup({
+    fileName: new FormControl(''),
     newGroup: new FormControl(''),
   });
 
-  defaultColour = '#FFFFFF';
-  currentColour: Colour =this.hexToRgb(this.defaultColour);
+  defaultColour = '#f8f9fa';
+  currentColour: Colour = this.hexToRgb(this.defaultColour);
 
-  constructor() {}
+  defaultFileName = 'my-led-matrix';
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   generateSnakeMatrix(width: number, height: number): Data[][] {
     const matrix: Data[][] = Array.from({ length: height }, (_, row) =>
@@ -113,9 +106,7 @@ export class MatrixComponent {
         groupedData[data.group].push(data);
       }
     });
-  
 
-    // CRGB(180,50,200)
     const outputStrings: string[] = [];
   
     Object.keys(groupedData).forEach(groupName => {
@@ -177,6 +168,36 @@ export class MatrixComponent {
         this.currentGroup = this.defaultGroup;
         this.groups.push(this.currentGroup);
       }
+    }
+  }
+
+  saveToFile(): void {
+    const matrixFile: MatrixFile = {
+      width: this.width,
+      height: this.height,
+      groups: this.groups,
+      matrix: this.matrix,
+      flatMatrix: this.flatMatrix,
+    };
+    const fileName = this.form.controls.fileName.value ?? this.defaultFileName;
+    saveToFile(matrixFile, fileName);
+  }
+
+  async loadFromFile(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+    const file = input.files[0];
+
+    try {
+      const matrixFile: MatrixFile = await loadFromFile(file);
+      this.width = matrixFile.width;
+      this.height = matrixFile.height;
+      this.groups = matrixFile.groups;
+      this.matrix = matrixFile.matrix;
+      this.flatMatrix = matrixFile.flatMatrix;
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error("An error occurred: ", error);
     }
   }
 }

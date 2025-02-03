@@ -1,13 +1,13 @@
-<div class="container">
+<div class="container" [formGroup]="form">
   <div class="row">
 
-    <div class="col-xxl-8 table-responsive">
+    <div class="col-xxl-8 table-responsive mb-5">
       <table>
         <tbody>
           @for (row of matrix; track row; let rowNum = $index) {
             <tr>
             @for (col of row; track col; let colNum = $index) {
-              <td class="data-cell p-1">
+              <td class="pointer p-1">
                 <div [ngClass]="col.group === currentGroup ? 'led-border-highlight' : 'led-border'">
                   <div 
                     class="d-flex justify-content-center align-items-center led"
@@ -27,70 +27,64 @@
 
     <div class="col-xxl-4">
 
-      <form class="mb-5 pt-2">
-        <label for="colourPicker" class="form-label h5 mb-4">Colour picker</label>
-        <input 
-          id="colourPicker" 
-          type="color" 
-          class="form-control form-control-color"
-          style="width: 80px; height: 80px;"
-          [value]="defaultColour"
-          title="Choose a colour"
-          (change)="changeColour($event)"
-        >
-      </form>
+      <h5 class="mb-3">Save file</h5>
 
- 
+      <div class="d-flex gap-3 mb-5">
+        <label for="fileName" class="visually-hidden">Enter file name</label>
+        <input type="text" id="fileName"class="form-control flex-grow-1" formControlName="fileName" placeholder="Enter file name">
+        <button class="btn btn-primary text-nowrap" (click)="saveToFile()">Save</button>
+      </div>
+
+
+      <h5 class="mb-3">Load file</h5>
+
+      <label for="loadFile" class="visually-hidden">Load from file</label>
+      <input class="form-control mb-5" type="file" id="loadFile" (change)="loadFromFile($event)">
+
+
+      <h5 class="mb-3">Colour picker</h5>
+
+      <label for="colourPicker" class="visually-hidden">Pick a colour</label>
+      <input 
+        id="colourPicker" 
+        type="color" 
+        class="form-control form-control-color mb-5"
+        style="width: 80px; height: 80px;"
+        [value]="defaultColour"
+        title="Choose a colour"
+        (change)="changeColour($event)"
+      >
+
+
       <div class="mb-5">
-        <p class="h5 mb-4">Groups</p>
+        <h5 class="mb-3">Data groups</h5>
+    
+        <div class="d-flex gap-3 mb-3">
+          <input type="text" class="form-control flex-grow-1" formControlName="newGroup">
+          <button type="submit" class="btn btn-primary text-nowrap" (click)="addGroup()">Add group</button>
+        </div>
 
-        <form [formGroup]="form" class="row g-3 mb-4">
-          <div class="col-8">
-            <input type="text" class="form-control" formControlName="newGroup">
-          </div>
-          <div class="col-4">
-            <button 
-              type="submit" 
-              class="btn btn-primary"
-              (click)="addGroup()"
-            >
-              Add group
-            </button>
-          </div>
-        </form>
-
-        @for (group of groups; track group) {
-          <div [ngClass]="{'mb-2': !$last}">
-            <input 
-              type="radio" 
-              class="btn-check " 
-              name="group" 
-              [id]="group" 
-              [checked]="group === currentGroup"
+        <ul class="list-group">
+          @for (group of groups; track group) {
+            <li 
+              class="pointer list-group-item d-flex justify-content-between align-items-center" 
+              [ngClass]="{'active': group === currentGroup}" 
               (click)="setGroup(group)"
             >
-            <label class="btn" [for]="group" >{{ group }}</label>
-            <button 
-              class="btn btn-link text-danger" 
-              type="button" 
-              (click)="removeGroup(group)"
-              >
-              <i class="bi bi-x-lg"></i>
-            </button>
-            
-            @if (!$last) {
-              <br />
-            }
-          </div>
-        }
+              {{ group }}
+              <i class="bi bi-x-lg" (click)="removeGroup(group)"></i>
+            </li>
+          }
+        </ul>
       </div>
- 
-      <p class="h5 mb-4">Code</p>
-      <p class="mb-0">
+
+
+      <h5 class="mb-3">Code</h5>
+      <div class="p-3 mb-0 text-bg-light border overflow-auto" style="height: 300px;">
           @for (data of flatMatrixString(); track data) {
             <pre class="mb-0 code">{{ data }}</pre>
           }
-      </p>
+        </div>
     </div>
   </div>
 </div>
