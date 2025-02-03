@@ -114,6 +114,8 @@ export class MatrixComponent {
       }
     });
   
+
+    // CRGB(180,50,200)
     const outputStrings: string[] = [];
   
     Object.keys(groupedData).forEach(groupName => {
@@ -121,7 +123,7 @@ export class MatrixComponent {
   
       groupedData[groupName].forEach((data, index) => {
         const isNotLast = index < groupedData[groupName].length - 1;
-        outputStrings.push(`    {${data.num}, {${data.colour?.r}, ${data.colour?.g}, ${data.colour?.b}}}${isNotLast ? ',' : ''}`);
+        outputStrings.push(`    {${data.num}, CRGB(${data.colour?.r}, ${data.colour?.g}, ${data.colour?.b})}${isNotLast ? ',' : ''}`);
       });
       outputStrings.push('};');
       outputStrings.push('\n');
