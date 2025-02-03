@@ -14,7 +14,9 @@
                     (click)="setColour(rowNum, colNum)"
                     [style.background-color]="col.colour !== null ? rgbToHex(col.colour.r, col.colour.g, col.colour.b) : defaultColour"
                   >
-                    <span>{{ col.num }}</span>
+                    @if (displayLedNumbers) {
+                      <span>{{ col.num }}</span>
+                    }
                   </div>
                 </div>
               </td>
@@ -26,22 +28,6 @@
     </div>
 
     <div class="col-xxl-4">
-
-      <h5 class="mb-3">Save file</h5>
-
-      <div class="d-flex gap-3 mb-5">
-        <label for="fileName" class="visually-hidden">Enter file name</label>
-        <input type="text" id="fileName"class="form-control flex-grow-1" formControlName="fileName" placeholder="Enter file name">
-        <button class="btn btn-primary text-nowrap" (click)="saveToFile()">Save</button>
-      </div>
-
-
-      <h5 class="mb-3">Load file</h5>
-
-      <label for="loadFile" class="visually-hidden">Load from file</label>
-      <input class="form-control mb-5" type="file" id="loadFile" (change)="loadFromFile($event)">
-
-
       <h5 class="mb-3">Colour picker</h5>
 
       <label for="colourPicker" class="visually-hidden">Pick a colour</label>
@@ -79,12 +65,37 @@
       </div>
 
 
-      <h5 class="mb-3">Code</h5>
-      <div class="p-3 mb-0 text-bg-light border overflow-auto" style="height: 300px;">
-          @for (data of flatMatrixString(); track data) {
-            <pre class="mb-0 code">{{ data }}</pre>
-          }
+      <div class="mb-5">
+        <h5 class="mb-3">Settings</h5>
+
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="displayLedNumbers" [checked]="displayLedNumbers" (change)="toggleDisplayLedNumbers($event)">
+          <label class="form-check-label" for="displayLedNumbers">Display LED numbers</label>
         </div>
+      </div>
+
+
+      <h5 class="mb-3">Code</h5>
+      <div class="p-3 mb-5 text-bg-light border overflow-auto" style="height: 300px;">
+        @for (data of flatMatrixString(); track data) {
+          <pre class="mb-0 code">{{ data }}</pre>
+        }
+      </div>
+
+
+      <h5 class="mb-3">Save file</h5>
+
+      <div class="d-flex gap-3 mb-5">
+        <label for="fileName" class="visually-hidden">Enter file name</label>
+        <input type="text" id="fileName"class="form-control flex-grow-1" formControlName="fileName" placeholder="Enter file name">
+        <button class="btn btn-primary text-nowrap" (click)="saveToFile()">Save</button>
+      </div>
+
+
+      <h5 class="mb-3">Load file</h5>
+
+      <label for="loadFile" class="visually-hidden">Load from file</label>
+      <input class="form-control mb-0" type="file" id="loadFile" (change)="loadFromFile($event)">
     </div>
   </div>
 </div>

@@ -32,6 +32,8 @@ export class MatrixComponent {
 
   defaultFileName = 'my-led-matrix';
 
+  displayLedNumbers: boolean = true;
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   generateSnakeMatrix(width: number, height: number): Data[][] {
@@ -199,5 +201,10 @@ export class MatrixComponent {
     } catch (error) {
       console.error("An error occurred: ", error);
     }
+  }
+
+  toggleDisplayLedNumbers(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.displayLedNumbers = input.checked;
   }
 }
