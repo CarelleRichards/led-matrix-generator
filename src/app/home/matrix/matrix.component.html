@@ -1,19 +1,21 @@
 <div class="container">
   <div class="row">
 
-    <div class="col-8">
+    <div class="col-xxl-8 table-responsive">
       <table>
         <tbody>
           @for (row of matrix; track row; let rowNum = $index) {
             <tr>
             @for (col of row; track col; let colNum = $index) {
-              <td class="data-cell p-2">
-                <div 
-                  class="d-flex justify-content-center align-items-center led"
-                  (click)="setColour(rowNum, colNum)"
-                  [style.background-color]="col.colour !== null ? rgbToHex(col.colour.r, col.colour.g, col.colour.b) : defaultColour"
-                >
-                  <span>{{ col.num }}</span>
+              <td class="data-cell p-1">
+                <div [ngClass]="col.group === currentGroup ? 'led-border-highlight' : 'led-border'">
+                  <div 
+                    class="d-flex justify-content-center align-items-center led"
+                    (click)="setColour(rowNum, colNum)"
+                    [style.background-color]="col.colour !== null ? rgbToHex(col.colour.r, col.colour.g, col.colour.b) : defaultColour"
+                  >
+                    <span>{{ col.num }}</span>
+                  </div>
                 </div>
               </td>
             }
@@ -23,7 +25,7 @@
       </table>
     </div>
 
-    <div class="col-4">
+    <div class="col-xxl-4">
 
       <form class="mb-5 pt-2">
         <label for="colourPicker" class="form-label h5 mb-4">Colour picker</label>

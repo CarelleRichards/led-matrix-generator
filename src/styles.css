@@ -1,6 +1,4 @@
 .data-cell {
-  width: 50px;
-  height: 50px;
   cursor: pointer;
 }
 
@@ -12,6 +10,22 @@
   align-items: center;
   justify-content: center;
   display: flex;
+  border: 5px solid #FFFFFF;
+  font-size: 12px;
+}
+
+.led-border-highlight {
+  width: 42px;
+  height: 42px;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: 50%;
+}
+
+.led-border {
+  width: 42px;
+  height: 42px;
+  border: var(--bs-border-width) solid #FFFFFF;
+  border-radius: 50%;
 }
 
 .code {
