@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Colour, Data, MatrixFile } from '../../types';
 import { loadFromFile, saveToFile } from '../../utils/file.utils';
 import { Tooltip } from 'bootstrap';
+import { hexToRgb, rgbToHex } from '../../utils/colour.utils';
 
 @Component({
   selector: 'app-matrix',
@@ -12,7 +13,7 @@ import { Tooltip } from 'bootstrap';
   templateUrl: './matrix.component.html',
   imports: [CommonModule, ReactiveFormsModule],
 })
-export class MatrixComponent implements AfterViewInit {
+export class MatrixComponent {
   width: number = 16;
   height: number = 16;
 
@@ -31,19 +32,15 @@ export class MatrixComponent implements AfterViewInit {
   });
 
   defaultColour = '#f8f9fa';
-  currentColour: Colour = this.hexToRgb(this.defaultColour);
+  currentColour: Colour = hexToRgb(this.defaultColour);
 
   defaultFileName = 'my-led-matrix';
 
   displayLedNumbers: boolean = true;
+
+  rgbToHex = rgbToHex;
   
   constructor(private cdr: ChangeDetectorRef) {}
-
-
-  ngAfterViewInit(): void {
-    // Initialize the tooltip
-
-  }
 
   generateSnakeMatrix(width: number, height: number): Data[][] {
     const matrix: Data[][] = Array.from({ length: height }, (_, row) =>
@@ -101,7 +98,7 @@ export class MatrixComponent implements AfterViewInit {
   changeColour(event: Event): void {
     const colorInput = event.target as HTMLInputElement;
     const hexColor = colorInput.value;
-    const rgb = this.hexToRgb(hexColor);
+    const rgb = hexToRgb(hexColor);
     this.currentColour = rgb;
   }
 
@@ -132,17 +129,6 @@ export class MatrixComponent implements AfterViewInit {
     });
   
     return outputStrings;
-  }
-
-  rgbToHex(r: number, g: number, b: number) {
-    return "#" + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1).toUpperCase();
-  }
-
-  hexToRgb(hex: string): Colour {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return { r, g, b };
   }
 
   addGroup(): void {
@@ -224,7 +210,11 @@ export class MatrixComponent implements AfterViewInit {
       matrix: this.matrix,
       flatMatrix: this.flatMatrix,
     };
-    const fileName = this.form.controls.fileName.value ?? this.defaultFileName;
+
+    let fileName = this.form.controls.fileName.value;
+
+    if (!fileName) fileName = this.defaultFileName;
+
     saveToFile(matrixFile, fileName);
   }
 
@@ -266,7 +256,7 @@ export class MatrixComponent implements AfterViewInit {
         tooltipInstance.show();
 
         // Remove tooltip text after 1.5 seconds
-        setTimeout(() => {
+        setTimeout(() => { 
           tooltipInstance.dispose();
         }, 1500);
       });
