@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Colour, Data, MatrixFile } from '../../types';
 import { loadFromFile, saveToFile } from '../../utils/file.utils';
+import { Tooltip } from 'bootstrap';
 
 @Component({
   selector: 'app-matrix',
@@ -11,9 +12,9 @@ import { loadFromFile, saveToFile } from '../../utils/file.utils';
   templateUrl: './matrix.component.html',
   imports: [CommonModule, ReactiveFormsModule],
 })
-export class MatrixComponent {
-  @Input() width: number = 16;
-  @Input() height: number = 16;
+export class MatrixComponent implements AfterViewInit {
+  width: number = 16;
+  height: number = 16;
 
   matrix: Data[][] = this.generateSnakeMatrix(this.width, this.height);
   flatMatrix: Data[] = [];
@@ -21,10 +22,12 @@ export class MatrixComponent {
   defaultGroup: string = 'data_group_1';
   currentGroup: string = this.defaultGroup;
   groups: string[] = [this.currentGroup];
+  groupToEdit: string | null = null;
   
   form = new FormGroup({
     fileName: new FormControl(''),
     newGroup: new FormControl(''),
+    editGroup: new FormControl(''),
   });
 
   defaultColour = '#f8f9fa';
@@ -33,8 +36,14 @@ export class MatrixComponent {
   defaultFileName = 'my-led-matrix';
 
   displayLedNumbers: boolean = true;
-
+  
   constructor(private cdr: ChangeDetectorRef) {}
+
+
+  ngAfterViewInit(): void {
+    // Initialize the tooltip
+
+  }
 
   generateSnakeMatrix(width: number, height: number): Data[][] {
     const matrix: Data[][] = Array.from({ length: height }, (_, row) =>
@@ -146,6 +155,40 @@ export class MatrixComponent {
     this.form.reset();
   }
 
+  editGroup(group: string): void {
+    this.form.controls.editGroup.setValue(group);
+    this.groupToEdit = group;
+  }
+
+  saveGroupChanges(): void {
+    const newGroupName = this.form.controls.editGroup.value?.trim();
+
+    if (!newGroupName || this.groups.includes(newGroupName) || this.groupToEdit === null) return; 
+  
+    const groupIndex = this.groups.indexOf(this.groupToEdit);
+    if (groupIndex !== -1) {
+      this.groups[groupIndex] = newGroupName;
+    }
+
+    this.matrix.forEach(row => {
+      row.forEach(cell => {
+        if (cell.group === this.groupToEdit) {
+          cell.group = newGroupName;
+        }
+      });
+    });
+
+    this.flatMatrix.forEach(data => {
+      if (data.group === this.groupToEdit) {
+        data.group = newGroupName;
+      }
+    });
+
+    if (this.currentGroup === this.groupToEdit) {
+      this.currentGroup = newGroupName;
+    }
+  }
+
   setGroup(group: string): void {
     this.currentGroup = group;
   }
@@ -206,5 +249,27 @@ export class MatrixComponent {
   toggleDisplayLedNumbers(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.displayLedNumbers = input.checked;
+  }
+
+  copyToClipboard(): void {
+    const codeElement = document.getElementById('code');
+    const copyElement = document.getElementById('copyIcon');
+
+    if (codeElement && copyElement) {
+      const content = codeElement.innerText; 
+
+      navigator.clipboard.writeText(content).then(() => {
+        const tooltipInstance = new Tooltip(copyElement, {
+          trigger: 'manual',
+        });
+        copyElement.setAttribute('data-bs-original-title', 'Copied!');
+        tooltipInstance.show();
+
+        // Remove tooltip text after 1.5 seconds
+        setTimeout(() => {
+          tooltipInstance.dispose();
+        }, 1500);
+      });
+    }
   }
 }

@@ -58,7 +58,10 @@
               (click)="setGroup(group)"
             >
               {{ group }}
-              <i class="bi bi-x-lg" (click)="removeGroup(group)"></i>
+              <span class="ms-auto">
+                <i class="bi bi-pen" data-bs-toggle="modal" data-bs-target="#editGroupName" (click)="editGroup(group)"></i>
+                <i class="bi bi-x-lg ms-2" (click)="removeGroup(group)"></i>
+              </span>
             </li>
           }
         </ul>
@@ -76,12 +79,15 @@
 
 
       <h5 class="mb-3">Code</h5>
-      <div class="p-3 mb-5 text-bg-light border overflow-auto" style="height: 300px;">
-        @for (data of flatMatrixString(); track data) {
-          <pre class="mb-0 code">{{ data }}</pre>
-        }
-      </div>
 
+      <div class="position-relative">
+        <i class="bi bi-clipboard pointer position-absolute top-0 end-0 m-3 me-4" id="copyIcon" (click)="copyToClipboard()" style="z-index: 10;"></i>
+        <div id="code" class="p-3 mb-5 text-bg-light border overflow-auto" style="height: 300px;">
+          @for (data of flatMatrixString(); track data) {
+            <pre class="mb-0 code">{{ data }}</pre>
+          }
+        </div>
+      </div>
 
       <h5 class="mb-3">Save file</h5>
 
@@ -96,6 +102,25 @@
 
       <label for="loadFile" class="visually-hidden">Load from file</label>
       <input class="form-control mb-0" type="file" id="loadFile" (change)="loadFromFile($event)">
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="editGroupName" tabindex="-1" aria-labelledby="editGroupNameLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editGroupNameLabel">Edit group name</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" formControlName="editGroup">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="saveGroupChanges()" data-bs-dismiss="modal">Save changes</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

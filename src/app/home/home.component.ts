@@ -7,7 +7,7 @@ import { MatrixComponent } from './matrix/matrix.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatrixComponent],
   template: `
-    <app-matrix [width]="16" [height]="16" />
+    <app-matrix />
   `, 
 })
 export class HomeComponent { }
