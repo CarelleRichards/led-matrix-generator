@@ -1,27 +1,12 @@
-# MyLedApp
+# LED Matrix Generator application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+A tool for designing and visualizing LED layouts, with the ability to generate C++ code for use with Arduino and the FastLED library.
 
-## Development server
+➡️ [Click to use LED Matrix Generator](https://carellerichards.github.io/led-matrix-generator/)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Interactive LED editing: Select a color and click an LED to apply it. Click an already colored LED to reset it.
+- Group management: Create groups to organize LEDs for independent control.
+- Save and load Designs: Save your layout to a file and reload it later for editing.
+- Code generation: Automatically generate C++ code compatible with Arduino and FastLED.
