@@ -86,12 +86,12 @@
         <fieldset class="row g-3 mb-4">
           <legend class="col-form-label mt-2">Matrix dimensions ({{ width }} W x {{ height }} H)</legend>
           <div class="col mt-0">
-            <label for="matrix-width" class="visually-hidden">Width</label>
-            <input type="text" id="matrix-width" class="form-control flex-grow-1" type="number" formControlName="matrixWidth" placeholder="Enter width">
+            <label for="matrixWidth" class="visually-hidden">Width</label>
+            <input type="text" id="matrixWidth" class="form-control flex-grow-1" type="number" formControlName="matrixWidth" placeholder="Enter width">
           </div>
           <div class="col mt-0">
-            <label for="matrix-height" class="visually-hidden">Height</label>
-            <input type="text" id="matrix-height" class="form-control flex-grow-1" type="number" formControlName="matrixHeight" placeholder="Enter height">
+            <label for="matrixHeight" class="visually-hidden">Height</label>
+            <input type="text" id="matrixHeight" class="form-control flex-grow-1" type="number" formControlName="matrixHeight" placeholder="Enter height">
           </div>
           <div class="col-auto mt-0">
             <button type="submit" class="btn btn-primary text-nowrap" (click)="setMatrixDimensions()">Apply</button>
