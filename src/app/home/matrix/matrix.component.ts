@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Colour, Data, MatrixFile } from '../../types';
 import { loadFromFile, saveToFile } from '../../utils/file.utils';
@@ -29,6 +29,8 @@ export class MatrixComponent {
     fileName: new FormControl(''),
     newGroup: new FormControl(''),
     editGroup: new FormControl(''),
+    matrixWidth: new FormControl(''),
+    matrixHeight: new FormControl(''),
   });
 
   defaultColour = '#f8f9fa';
@@ -65,6 +67,23 @@ export class MatrixComponent {
       }
     }
     return matrix;
+  }
+
+  setMatrixDimensions(): void {
+    const newWidth = Number(this.form.controls.matrixWidth.value?.trim());
+    const newHeight = Number(this.form.controls.matrixWidth.value?.trim());
+
+    if (!newWidth || !newHeight) return;
+
+    this.width = newWidth;
+    this.height = newHeight;
+    this.flatMatrix = [];
+    this.currentGroup = this.defaultGroup;
+    this.groups = [this.currentGroup];
+    this.groupToEdit = null;
+    this.matrix = this.generateSnakeMatrix(newWidth, newHeight);
+    
+    this.cdr.markForCheck();
   }
 
   setColour(row: number, col: number): void {
@@ -212,7 +231,6 @@ export class MatrixComponent {
     };
 
     let fileName = this.form.controls.fileName.value;
-
     if (!fileName) fileName = this.defaultFileName;
 
     saveToFile(matrixFile, fileName);
