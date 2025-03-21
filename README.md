@@ -1,6 +1,6 @@
 # LED Matrix Generator application
 
-A tool for designing and visualizing LED layouts, with the ability to generate C++ code for use with Arduino and the FastLED library.
+A tool for designing and visualising LED layouts, with the ability to generate C++ code for use with Arduino and the FastLED library.
 
 ➡️ [Click to use LED Matrix Generator](https://carellerichards.github.io/led-matrix-generator/)
 
