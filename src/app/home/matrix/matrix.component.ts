@@ -51,7 +51,7 @@ export class MatrixComponent {
       Array.from({ length: width }, (_, col) => ({
         num: 0,   
         colour: null, 
-        group: this.currentGroup, 
+        group: null, 
       }))
     );
 
@@ -76,15 +76,14 @@ export class MatrixComponent {
     const newHeight = Number(this.form.controls.matrixWidth.value?.trim());
 
     if (!newWidth || !newHeight) return;
-
+    
     this.width = newWidth;
     this.height = newHeight;
-    this.flatMatrix = [];
-    this.currentGroup = this.defaultGroup;
     this.groups = [this.currentGroup];
-    this.groupToEdit = null;
     this.matrix = this.generateSnakeMatrix(newWidth, newHeight);
-    
+    this.flatMatrix = [];
+    this.currentGroup = this.defaultGroup;  
+    this.groupToEdit = null;
     this.cdr.markForCheck();
   }
 
