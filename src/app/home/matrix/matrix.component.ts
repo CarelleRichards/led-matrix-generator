@@ -16,6 +16,8 @@ import { hexToRgb, rgbToHex } from '../../utils/colour.utils';
 export class MatrixComponent {
   width: number = 16;
   height: number = 16;
+  zoomPercent: number = 100;
+  zoomPercentIncrement: number = 5;
 
   matrix: Data[][] = this.generateSnakeMatrix(this.width, this.height);
   flatMatrix: Data[] = [];
@@ -279,5 +281,13 @@ export class MatrixComponent {
         }, 1500);
       });
     }
+  }
+
+  zoomIn(): void {
+    this.zoomPercent += this.zoomPercentIncrement;
+  }
+
+  zoomOut(): void {
+    this.zoomPercent -= this.zoomPercentIncrement;
   }
 }
