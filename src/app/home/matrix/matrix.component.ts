@@ -73,10 +73,10 @@ export class MatrixComponent {
 
   setMatrixDimensions(): void {
     const newWidth = Number(this.form.controls.matrixWidth.value?.trim());
-    const newHeight = Number(this.form.controls.matrixWidth.value?.trim());
+    const newHeight = Number(this.form.controls.matrixHeight.value?.trim());
 
     if (!newWidth || !newHeight) return;
-    
+
     this.width = newWidth;
     this.height = newHeight;
     this.groups = [this.currentGroup];
